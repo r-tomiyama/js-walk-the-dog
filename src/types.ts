@@ -1,19 +1,14 @@
-export interface Rect {
-    x: number;
-    y: number;
-    w: number;
-    h: number;
-  }
-  
-export interface Cell {
+import { Rect } from "./engines/types";
+
+export type Cell = {
     frame: Rect;
   }
   
-export interface Sheet {
+export type Sheet = {
     frames: { [key: string]: Cell };
   }
 
-export interface Point {
+export type Point = {
   x: number;
   y: number;
 }

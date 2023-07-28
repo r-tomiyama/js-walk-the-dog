@@ -1,8 +1,8 @@
-import { IGame } from "../engines/IGame";
-import { KeyState } from "../engines/KeyState";
-import { Renderer } from "../engines/Renderer";
-import { Point, Sheet } from "../types";
-import { fetchJson, loadImage } from "../utils";
+import { IGame } from "./engines/IGame";
+import { KeyState } from "./engines/KeyState";
+import { Renderer } from "./engines/Renderer";
+import { Point, Sheet } from "./types";
+import { fetchJson, loadImage } from "./utils";
 
 export class WalkTheDogGame implements IGame {
   private image: HTMLImageElement;

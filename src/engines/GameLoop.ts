@@ -1,4 +1,3 @@
-import { context } from "../utils";
 import { IGame } from "./IGame";
 import { KeyState } from "./KeyState";
 import { Renderer } from "./Renderer";
@@ -6,49 +5,51 @@ import { Renderer } from "./Renderer";
 export class GameLoop {
     private lastFrame: number;
     private accumulatedDelta: number;
+    private readonly game: IGame;
+    private readonly renderer: Renderer;
+    private readonly keyState: KeyState;
 
     private readonly FRAME_SIZE: number = 1.0 / 60.0 * 1000.0;
   
-    private constructor() {
+    constructor(context: CanvasRenderingContext2D, game: IGame) {
       this.lastFrame = performance.now();
       this.accumulatedDelta = 0.0;
+      this.game = game;
+      this.renderer = new Renderer(context); 
+      this.keyState = new KeyState();
     }
   
-    public static start(game: IGame): void {
-      const gameLoop = new GameLoop();
-      const renderer = new Renderer(context); 
-
-      const keyState = new KeyState();
-      gameLoop.prepareInput(keyState);
+    public start(): void {
+      this.prepareInput();
   
-      const rafLoop = (perf: number) => {
-        gameLoop.processFrame(game, renderer, perf, keyState);
+      const requestAnimationFrameLoop = (perf: number) => {
+        this.processFrame(perf);
   
         // Request next animation frame
-        requestAnimationFrame(rafLoop);
+        requestAnimationFrame(requestAnimationFrameLoop);
       };
 
       // Start the animation loop
-      requestAnimationFrame(rafLoop);
+      requestAnimationFrame(requestAnimationFrameLoop);
     }
   
-    private processFrame(game: IGame, renderer: Renderer, perf: number, keyState: KeyState): void {  
+    private processFrame(perf: number): void {  
       this.accumulatedDelta += perf - this.lastFrame;
       while (this.accumulatedDelta > this.FRAME_SIZE) {
-        game.update(keyState);
+        this.game.update(this.keyState);
         this.accumulatedDelta -= this.FRAME_SIZE;
       }
       this.lastFrame = performance.now();
-      game.draw(renderer);
+      this.game.draw(this.renderer);
     }
 
-    private prepareInput(keyState: KeyState): void {
+    private prepareInput(): void {
       document.addEventListener("keydown", (keyboardEvent) => {
-        keyState.setPressed(keyboardEvent.code, keyboardEvent);
+        this.keyState.setPressed(keyboardEvent.code, keyboardEvent);
       });
       
       document.addEventListener("keyup", (keyboardEvent) => {
-        keyState.setReleased(keyboardEvent.code);
+        this.keyState.setReleased(keyboardEvent.code);
       });
     } 
   }
