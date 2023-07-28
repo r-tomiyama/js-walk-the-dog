@@ -10,7 +10,7 @@ export class WalkTheDogGame implements IGame {
   private frame: number;
   private position: Point;
 
-constructor(image: HTMLImageElement, sheet: Sheet) {
+  constructor(image: HTMLImageElement, sheet: Sheet) {
     this.image = image;
     this.sheet = sheet;
     this.frame = 0;
@@ -18,27 +18,27 @@ constructor(image: HTMLImageElement, sheet: Sheet) {
   }
 
   public static async new(): Promise<WalkTheDogGame> {
-    const image = await loadImage('./assets/rhb.png');
-    const sheet = await fetchJson<Sheet>('./assets/rhb.json');
+    const image = await loadImage("./assets/rhb.png");
+    const sheet = await fetchJson<Sheet>("./assets/rhb.json");
 
     return new WalkTheDogGame(image, sheet);
   }
 
   public update(keyState: KeyState): void {
     const velocity: Point = { x: 0, y: 0 };
-    if (keyState.isPressed('ArrowDown')) {
+    if (keyState.isPressed("ArrowDown")) {
       velocity.y += 3;
     }
 
-    if (keyState.isPressed('ArrowUp')) {
+    if (keyState.isPressed("ArrowUp")) {
       velocity.y -= 3;
     }
 
-    if (keyState.isPressed('ArrowRight')) {
+    if (keyState.isPressed("ArrowRight")) {
       velocity.x += 3;
     }
 
-    if (keyState.isPressed('ArrowLeft')) {
+    if (keyState.isPressed("ArrowLeft")) {
       velocity.x -= 3;
     }
 
@@ -68,12 +68,12 @@ constructor(image: HTMLImageElement, sheet: Sheet) {
           w: sprite.frame.w,
           h: sprite.frame.h,
         },
-        { 
+        {
           x: this.position.x,
           y: this.position.y,
           w: sprite.frame.w,
           h: sprite.frame.h,
-        }
+        },
       );
     }
   }
