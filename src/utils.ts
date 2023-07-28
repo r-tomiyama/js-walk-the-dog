@@ -12,5 +12,8 @@ export const loadImage = (src: string): Promise<HTMLImageElement> =>
     image.onload = () => resolve(image);
     image.onerror = (err) => reject(err);
     image.src = src;
+
+    return image;
 });
 
+export const context = document.querySelector<HTMLCanvasElement>('canvas')!.getContext('2d')!;

@@ -1,3 +1,6 @@
-import { setupCanvas } from './canvas.ts'
+import { WalkTheDogGame } from './domains/WalkTheDogGame.ts'
+import { GameLoop } from './engines/GameLoop.ts';
 
-await setupCanvas(document.querySelector<HTMLCanvasElement>('canvas')!)
+const game = await WalkTheDogGame.new();
+GameLoop.start(game);
+
