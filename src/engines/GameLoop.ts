@@ -1,5 +1,6 @@
 import { context } from "../utils";
 import { IGame } from "./IGame";
+import { KeyState } from "./KeyState";
 import { Renderer } from "./Renderer";
 
 export class GameLoop {
@@ -16,10 +17,12 @@ export class GameLoop {
     public static start(game: IGame): void {
       const gameLoop = new GameLoop();
       const renderer = new Renderer(context); 
-  
+
+      const keyState = new KeyState();
+      gameLoop.prepareInput(keyState);
   
       const rafLoop = (perf: number) => {
-        gameLoop.processFrame(game, renderer, perf);
+        gameLoop.processFrame(game, renderer, perf, keyState);
   
         // Request next animation frame
         requestAnimationFrame(rafLoop);
@@ -29,15 +32,23 @@ export class GameLoop {
       requestAnimationFrame(rafLoop);
     }
   
-    private processFrame(game: IGame, renderer: Renderer, perf: number): void {
-      // processInput(keyEventReceiver);
-  
+    private processFrame(game: IGame, renderer: Renderer, perf: number, keyState: KeyState): void {  
       this.accumulatedDelta += perf - this.lastFrame;
       while (this.accumulatedDelta > this.FRAME_SIZE) {
-        game.update();
+        game.update(keyState);
         this.accumulatedDelta -= this.FRAME_SIZE;
       }
       this.lastFrame = performance.now();
       game.draw(renderer);
     }
+
+    private prepareInput(keyState: KeyState): void {
+      document.addEventListener("keydown", (keyboardEvent) => {
+        keyState.setPressed(keyboardEvent.code, keyboardEvent);
+      });
+      
+      document.addEventListener("keyup", (keyboardEvent) => {
+        keyState.setReleased(keyboardEvent.code);
+      });
+    } 
   }

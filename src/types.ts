@@ -12,3 +12,8 @@ export interface Cell {
 export interface Sheet {
     frames: { [key: string]: Cell };
   }
+
+export interface Point {
+  x: number;
+  y: number;
+}

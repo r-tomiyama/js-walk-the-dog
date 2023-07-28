@@ -1,19 +1,20 @@
 import { IGame } from "../engines/IGame";
+import { KeyState } from "../engines/KeyState";
 import { Renderer } from "../engines/Renderer";
-import { Sheet } from "../types";
+import { Point, Sheet } from "../types";
 import { fetchJson, loadImage } from "../utils";
 
 export class WalkTheDogGame implements IGame {
   private image: HTMLImageElement;
   private sheet: Sheet;
   private frame: number;
-//   private position: Point;
+  private position: Point;
 
 constructor(image: HTMLImageElement, sheet: Sheet) {
     this.image = image;
     this.sheet = sheet;
     this.frame = 0;
-    // this.position = { x: 0, y: 0 };
+    this.position = { x: 0, y: 0 };
   }
 
   public static async new(): Promise<WalkTheDogGame> {
@@ -23,26 +24,26 @@ constructor(image: HTMLImageElement, sheet: Sheet) {
     return new WalkTheDogGame(image, sheet);
   }
 
-  public update(): void {
-    // let velocity: Point = { x: 0, y: 0 };
-    // if (keystate.isPressed('ArrowDown')) {
-    //   velocity.y += 3;
-    // }
+  public update(keyState: KeyState): void {
+    const velocity: Point = { x: 0, y: 0 };
+    if (keyState.isPressed('ArrowDown')) {
+      velocity.y += 3;
+    }
 
-    // if (keystate.isPressed('ArrowUp')) {
-    //   velocity.y -= 3;
-    // }
+    if (keyState.isPressed('ArrowUp')) {
+      velocity.y -= 3;
+    }
 
-    // if (keystate.isPressed('ArrowRight')) {
-    //   velocity.x += 3;
-    // }
+    if (keyState.isPressed('ArrowRight')) {
+      velocity.x += 3;
+    }
 
-    // if (keystate.isPressed('ArrowLeft')) {
-    //   velocity.x -= 3;
-    // }
+    if (keyState.isPressed('ArrowLeft')) {
+      velocity.x -= 3;
+    }
 
-    // this.position.x += velocity.x;
-    // this.position.y += velocity.y;
+    this.position.x += velocity.x;
+    this.position.y += velocity.y;
 
     if (this.frame < 23) {
       this.frame += 1;
@@ -67,11 +68,9 @@ constructor(image: HTMLImageElement, sheet: Sheet) {
           w: sprite.frame.w,
           h: sprite.frame.h,
         },
-        {
-            x: 0.0,
-            y: 0.0,
-        //   x: this.position.x,
-        //   y: this.position.y,
+        { 
+          x: this.position.x,
+          y: this.position.y,
           w: sprite.frame.w,
           h: sprite.frame.h,
         }
